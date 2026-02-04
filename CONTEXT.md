@@ -1,39 +1,55 @@
-# Project Context & Coding Standards
+# Project Context & Coding Standards (v2.0)
 
 ## Role
-You are an expert Senior Frontend Engineer specializing in **React (Vite)** and **Firebase v9 (Modular SDK)**. You prioritize clean, readable code and strict type safety (even in JS).
+You are an expert Senior Frontend Engineer and UX Designer. You specialize in building "Gamified" social platforms using **React (Vite)** and **Firebase**.
+
+## Design System ("The Fresh Look")
+* **Palette:**
+    * **Primary:** Emerald Green (`#10b981`). Used for: Primary buttons, high ratings (4.0+), upvote active state.
+    * **Secondary:** Clean White (`bg-white`) with subtle gray borders (`border-gray-200`).
+    * **Text:** Dark Gray (`text-gray-900`) for headers, Light Gray (`text-gray-500`) for meta-info.
+* **Typography:** Sans-serif (Inter or System UI). Rounded corners (`rounded-xl`).
+* **Tone:** Trustworthy, Fresh, Student-Focused. Avoid "boxy" layouts; use generous padding.
 
 ## Tech Stack Rules
-* **Framework:** React + Vite.
-* **Styling:** Tailwind CSS. Use utility classes directly. Do NOT use CSS modules or styled-components.
-* **Database:** Firebase Cloud Firestore.
+* **Frontend:** React + Vite + Tailwind CSS.
+* **Icons:** Use `lucide-react` (install if missing).
+* **Database:** Firebase Firestore (Modular SDK).
 * **Auth:** Firebase Authentication (Google Provider).
+* **AI:** OpenAI API (GPT-3.5 or similar) for content moderation.
 
-## Coding Guidelines (Strict Enforcement)
+## Core Features & Logic (Strict Enforcement)
 
-### 1. Firebase Imports (Crucial)
-* NEVER use the `compat` libraries (e.g., `import firebase from 'firebase/compat/app'`).
-* ALWAYS use the **Modular SDK v9**:
-    * `import { getFirestore, doc, getDoc } from 'firebase/firestore';`
-    * `import { getAuth, signInWithPopup } from 'firebase/auth';`
+### 1. Voting & Reputation ("Crumbs")
+* **Goal:** Gamify the experience.
+* **Schema:**
+    * **Reviews** have `upvote_count` (number), `upvoted_by` (array of UIDs), and `downvoted_by` (array of UIDs).
+    * **Users** have `crumbs` (number).
+* **Voting Logic (Transaction Required):**
+    * Check if `user.uid` is already in `upvoted_by`. If yes, block.
+    * If no:
+        1. Add `user.uid` to `upvoted_by` array (use `arrayUnion`).
+        2. Increment `review.upvote_count`.
+        3. Increment the **Review Author's** `crumbs` field by +1.
 
-### 2. React Components
-* Use **Functional Components** with Arrow Functions: `const ComponentName = () => { ... }`.
-* Use **Hooks** for state management (`useState`, `useEffect`).
-* Create custom hooks for logic separation (e.g., `useAuth`, `useReviews`).
-* **Prop Types:** If not using TypeScript, clearly document props at the top of the component file.
+### 2. Content Moderation (OpenAI)
+* **Trigger:** When a user submits a review form.
+* **Process:**
+    1. Send `review.text` to OpenAI API with prompt: *"Is this text hate speech, severe profanity, or harassment? Answer TRUE or FALSE."*
+    2. **If Safe:** Save to Firestore with `moderation_verified: true`.
+    3. **If Unsafe:** Reject submission and show error to user.
 
-### 3. Asynchronous Logic
-* Use `async/await` for all database calls.
-* ALWAYS wrap Firebase calls in `try/catch` blocks to handle network errors gracefully.
-* Show loading states (spinners/skeletons) while fetching data.
+### 3. Search Bar (Global)
+* **Priority:** Search results must display **Dining Locations** first, then **Users**.
+* **Query:** Search `dining_locations` where `name` OR `university` matches the query string.
 
-### 4. Security & Environment
-* Access environment variables using `import.meta.env.VITE_VARIABLE_NAME`.
-* Never hardcode API keys in the component files.
+### 4. Location Submissions (Admin Flow)
+* **User Action:** Users can "Suggest a Location".
+* **Logic:** Save new documents to `dining_locations` with `status: "pending"`.
+* **Visibility:** Only fetch/display locations where `status == "approved"` in the main grid.
 
-### 5. Directory Structure
-* `/src/components`: Reusable UI elements (Buttons, Cards).
-* `/src/pages`: Full page views (Home, HallDetails).
-* `/src/lib`: Configuration files (firebase.js).
-* `/src/hooks`: Custom React hooks.
+## Coding Best Practices
+* **Firebase Imports:** ALWAYS use Modular SDK (e.g., `import { updateDoc, increment, arrayUnion } from 'firebase/firestore'`).
+* **Async/Await:** Wrap all database and API calls in `try/catch` blocks.
+* **Environment Variables:** Access secrets via `import.meta.env.VITE_VARIABLE_NAME`.
+* **Responsive:** Mobile-first approach. Grids should be `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`.

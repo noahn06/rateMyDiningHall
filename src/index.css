@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+/* Black & White Theme with Helvetica */
+:root {
+    --color-bg: #ffffff;
+    --color-text: #111827;
+    /* Gray 900 */
+    --color-accent: #10b981;
+    /* Emerald 500 */
+    --color-border: #e5e7eb;
+    /* Gray 200 */
+    --color-card-bg: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility Classes */
+.btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+    background-color: #059669;
+    /* Emerald 600 */
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Smaller button variant */
+.btn-primary-sm {
+    background-color: var(--color-accent);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary-sm:hover {
+    background-color: #059669;
+    /* Emerald 600 */
+}
+
+/* Text button (no background) */
+.btn-text {
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-text:hover {
+    opacity: 0.8;
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    /* shadow-sm */
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Badge Styles */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.badge-fast {
+    background-color: #ecfdf5;
+    /* Emerald 50 */
+    color: #047857;
+    /* Emerald 700 */
+}
+
+.badge-value {
+    background-color: #eff6ff;
+    /* Blue 50 */
+    color: #1d4ed8;
+    /* Blue 700 */
+}
+
+.badge-latenight {
+    background-color: #fffbeb;
+    /* Amber 50 */
+    color: #b45309;
+    /* Amber 700 */
+}
+
+/* Star Rating */
+.star {
+    color: #fbbf24;
+}
+
+.star-empty {
+    color: #d1d5db;
+}
+
+/* Carousel Scrollbar Styles */
+.scrollbar-visible {
+    scrollbar-width: thin;
+    scrollbar-color: #9CA3AF #E5E7EB;
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+    height: 8px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+    background: #E5E7EB;
+    border-radius: 4px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+    background: #9CA3AF;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+}
