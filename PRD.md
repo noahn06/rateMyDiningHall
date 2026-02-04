@@ -3,8 +3,8 @@
 ## 1. Project Overview
 * **Name:** RateMyDiningHall
 * [cite_start]**Description:** A crowdsourced review platform where University of Washington (UW) students can rate and review campus dining locations (dining halls, markets, and cafés)[cite: 4].
-* [cite_start]**Core Value:** Quick, trustworthy, student-driven feedback to help students decide where to eat[cite: 5].
-* [cite_start]**Target Audience:** University of Washington students (verified via Google OAuth)[cite: 6].
+* **Core Value:** Quick, trustworthy, student-driven feedback to help students decide where to eat.
+* **Target Audience:** University of Washington students (any Google account allowed for authentication).
 
 ## 2. Core User Flows (MVP)
 
@@ -24,8 +24,11 @@
     * [cite_start]Thumbnail image[cite: 21].
     * [cite_start]Overall average rating (1.0-5.0 stars)[cite: 25].
     * [cite_start]Total number of reviews[cite: 26].
-    * [cite_start]**Badges (Data-driven):** "Late Night Friendly", "Good Value", "Fast Lines"[cite: 27, 28, 29, 30].
-* [cite_start]**Sorting Options:** Highest rated, Most reviewed, Best value, Best late-night[cite: 31, 32, 33, 35, 36].
+    * **Badges (Data-driven, thresholds below):**
+        * "Late Night Friendly": `late_night_avg >= 4.0`
+        * "Good Value": `value_avg >= 4.0`
+        * "Fast Lines": `wait_time_avg < 10 min`
+* **Sorting Options:** Highest rated, Most reviewed, Best value, Best late-night (straightforward sorting by respective `avg` fields). If a location has the desired badge, display it even if it has multiple other badges.
 * **Filtering Options:**
     * [cite_start]Campus Area (North / West / Central)[cite: 38].
     * [cite_start]Location Type (Dining Hall / Market / Café)[cite: 39].
@@ -34,7 +37,7 @@
 ### C. Location Details & Review Page
 * [cite_start]**Header:** Location name, image, overall rating, and review count[cite: 46, 49].
 * [cite_start]**Stats:** Auto-generated "Best for" tags (e.g., "Big portions")[cite: 50].
-* [cite_start]**Category Rating Breakdown:** Visuals for Food quality, Price/value, Portion size, Dietary options, Wait time, Late-night friendliness [cite: 51-57].
+* **Category Rating Breakdown:** Visuals for Food quality, Price/value, Portion size, Dietary options, Wait time (5 / 10 / 15 / 20+ min buckets), Late-night friendliness.
 * [cite_start]**Review List:** Displays individual reviews sorted by "Newest" (default)[cite: 59, 60].
 * **Write a Review Action:**
     * [cite_start]**Logged Out:** Show "Sign in to review" button[cite: 63].
@@ -49,25 +52,26 @@
 * [cite_start]**Quick Tags (Optional):** "Good after 9pm", "Crowded", "Huge portions", "Not worth the price", "Great vegan options" [cite: 80-85].
 
 ### E. User Profile
-* [cite_start]**Profile Page:** Displays Google display name, profile photo, total reviews written, and a bio (max 150 chars)[cite: 89, 91, 92, 93].
-* [cite_start]**Actions:** Edit bio, view all authored reviews, edit past reviews[cite: 95, 96].
+* **Profile Page:** Displays Google display name, profile photo, total reviews written, and a bio (max 150 chars).
+* **Actions:** Edit bio, view all authored reviews, edit past reviews, **delete own reviews**.
 
 ## 3. Data Schema (Firebase Firestore)
 
 ### Collection: `dining_locations` (Static Data)
-* [cite_start]`name` (string) [cite: 101]
-* [cite_start]`type` (string: "dining_hall" | "market" | "cafe") [cite: 102]
-* [cite_start]`campus_area` (string: "north" | "west" | "central") [cite: 103]
-* [cite_start]`image_url` (string) [cite: 104]
-* [cite_start]`avg_rating` (number) [cite: 105]
-* [cite_start]`review_count` (number) [cite: 107]
+* `name` (string)
+* `type` (string: "dining_hall" | "market" | "cafe")
+* `campus_area` (string: "north" | "west" | "central")
+* `image_url` (string) — *Provided by team*
+* `dietary_options` (array of strings: "veg" | "halal" | "gluten_free") — *Static per location*
+* `avg_rating` (number)
+* `review_count` (number)
 * **Aggregated Ratings:**
-    * [cite_start]`food_quality_avg` (number) [cite: 109]
-    * [cite_start]`value_avg` (number) [cite: 110]
-    * [cite_start]`portion_size_avg` (number) [cite: 111]
-    * [cite_start]`dietary_avg` (number) [cite: 112]
-    * [cite_start]`wait_time_avg` (number) [cite: 114]
-    * [cite_start]`late_night_avg` (number) [cite: 115]
+    * `food_quality_avg` (number)
+    * `value_avg` (number)
+    * `portion_size_avg` (number)
+    * `dietary_avg` (number)
+    * `wait_time_avg` (number) — *Stored in minutes (5 / 10 / 15 / 20+)*
+    * `late_night_avg` (number)
 
 ### Collection: `reviews` (User Generated)
 * [cite_start]`id` (string: Document ID) [cite: 120]
@@ -90,7 +94,7 @@
 
 ## 4. Tech Stack & Infrastructure
 * [cite_start]**Frontend:** React (Vite) [cite: 150]
-* [cite_start]**Styling:** Tailwind CSS (Mobile-first) [cite: 151]
+* **Styling:** Tailwind CSS (Desktop-first, with clean mobile responsiveness)
 * [cite_start]**Backend:** Firebase (Firestore, Auth) [cite: 152]
 * [cite_start]**Hosting:** Vercel [cite: 153]
 * [cite_start]**Auth:** Google OAuth [cite: 154]
